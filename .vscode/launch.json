@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch NotableApplication",
+      "request": "launch",
+      "mainClass": "com.notable.notable.NotableApplication",
+      "projectName": "notable"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "vmArgs": "-note",
+      "mainClass": "NotableApplication.java",
+      "projectName": "baz"
+    }
+  ]
+}
