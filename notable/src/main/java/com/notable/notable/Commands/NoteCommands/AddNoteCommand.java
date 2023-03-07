@@ -1,6 +1,7 @@
 package com.notable.notable.Commands.NoteCommands;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.notable.notable.Model.Note;
 import com.notable.notable.Repository.NoteRepo;
@@ -9,6 +10,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+@Component
 @Command(name = "add", description = "Add a new note")
 public class AddNoteCommand implements Runnable {
 
