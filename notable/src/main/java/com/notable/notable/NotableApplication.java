@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.notable.notable.Commands.NoteCommands.AddNoteCommand;
-import com.notable.notable.Repository.NoteRepo;
 
 @SpringBootApplication
 public class NotableApplication {
