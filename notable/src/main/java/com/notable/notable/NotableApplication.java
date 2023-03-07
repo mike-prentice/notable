@@ -17,8 +17,7 @@ public class NotableApplication {
 
 	public static void main(String[] args) {
 		System.exit(SpringApplication.exit(SpringApplication.run(NotableApplication.class, args)));
-		
-		
+
 	}
 
 }

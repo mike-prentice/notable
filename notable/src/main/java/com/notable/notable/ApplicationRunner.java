@@ -13,7 +13,7 @@ import picocli.CommandLine.IFactory;
 @Component
 @EnableAutoConfiguration
 public class ApplicationRunner implements CommandLineRunner, ExitCodeGenerator {
-     // auto-configured to inject PicocliSpringFactory
+  // auto-configured to inject PicocliSpringFactory
   private final IFactory factory;
 
   private final ParentCommand parentCommand;
