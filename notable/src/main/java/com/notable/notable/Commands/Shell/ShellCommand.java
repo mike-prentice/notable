@@ -5,14 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
-
-
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
 import com.notable.notable.Commands.NoteCommands.AddNoteCommand;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
@@ -41,9 +39,9 @@ import org.jline.widget.TailTipWidgets;
                 HelpCommand.class,
         })
 @Component
-@Getter
 @RequiredArgsConstructor
-public class ShellCommand implements Runnable {
+@Getter
+public class ShellCommand implements Runnable, ExitCodeGenerator {
     private LineReaderImpl reader;
     private PrintWriter out;
 
@@ -54,11 +52,16 @@ public class ShellCommand implements Runnable {
     }
 
     @Override
+    public int getExitCode() {
+        return exitCode;
+    }
+
+    @Override
     public void run() {
         ShellCommand shell = new ShellCommand();
         AnsiConsole.systemInstall();
         try {
-            Supplier<Path> workDir = () -> Paths.get(System.getProperty("user.home"));
+            Supplier<Path> workDir = () -> Paths.get(System.getProperty("user.dir"));
             Builtins builtins = new Builtins(workDir, null, null);
             builtins.rename(Builtins.Command.TTOP, "top");
             builtins.alias("zle", "widget");
@@ -74,7 +77,7 @@ public class ShellCommand implements Runnable {
                 systemRegistry.register("help", picoCommands);
 
                 LineReader reader = LineReaderBuilder.builder()
-                        .appName("Notable")
+                        .appName("notable")
                         .terminal(terminal)
                         .completer(systemRegistry.completer())
                         .parser(parser)
@@ -90,7 +93,7 @@ public class ShellCommand implements Runnable {
                 KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
                 keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
-                String prompt = "Notable> ";
+                String prompt = "notable> ";
                 String rightPrompt = null;
 
                 String line;

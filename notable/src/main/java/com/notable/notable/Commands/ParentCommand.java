@@ -9,18 +9,18 @@ import org.springframework.boot.ExitCodeGenerator;
 
 import org.springframework.stereotype.Component;
 
+import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Option;
 import picocli.CommandLine;
 import picocli.CommandLine.IFactory;
 
-@Component
-@CommandLine.Command(name = "Notable", mixinStandardHelpOptions = true, version = "1.0", description = "Take notes via the command line.", subcommands = {
+
+@Command(name = "notable", showAtFileInUsageHelp = true, mixinStandardHelpOptions = true, version = "1.0", description = "Take notes via the command line.", subcommands = {
         AddNoteCommand.class,
-        ShellCommand.class,
         HelpCommand.class
 })
-@RequiredArgsConstructor
+@Component @RequiredArgsConstructor
 public class ParentCommand implements Runnable, ExitCodeGenerator {
     private final IFactory factory;
     private final ShellCommand shell;

@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli-spring-boot-starter</artifactId>
-			<version>4.7.0</version>
+			<version>4.7.1</version>
 		</dependency>
 
 		<dependency>
@@ -77,7 +77,12 @@
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli-shell-jline3</artifactId>
 			<version>4.7.1</version>
-		</dependency>
+		  </dependency>
+		  <dependency>
+			<groupId>org.jline</groupId>
+			<artifactId>jline</artifactId>
+			<version>3.22.0</version>
+		  </dependency>
 	</dependencies>
 
 	<build>
