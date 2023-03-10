@@ -2,16 +2,19 @@ package com.notable.notable.Commands;
 
 import com.notable.notable.Commands.NoteCommands.AddNoteCommand;
 
-
-
+import io.quarkus.picocli.runtime.annotations.TopCommand;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Option;
 
 
 
+
+
+
+@TopCommand
 @Command(name = "notable", showAtFileInUsageHelp = true, mixinStandardHelpOptions = true, version = "1.0", description = "Take notes via the command line.", subcommands = {
-        AddNoteCommand.class,
+       AddNoteCommand.class,
         HelpCommand.class
 })
  
@@ -39,7 +42,6 @@ public class ParentCommand implements Runnable {
 
     @Override
     public void run() {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'run'");
+      System.out.println("Hello from notable!");
     }
 }
