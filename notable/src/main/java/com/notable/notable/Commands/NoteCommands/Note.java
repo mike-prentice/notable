@@ -2,10 +2,10 @@ package com.notable.notable.Commands.NoteCommands;
 
 import picocli.CommandLine.Command;
 
-@Command(name = "comment", subcommands = {
+@Command(name = "notes", subcommands = {
     AddNoteCommand.class
 })
-public class Comment implements Runnable {
+public class Note implements Runnable {
 
     @Override
     public void run() {

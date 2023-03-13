@@ -2,7 +2,7 @@ package com.notable.notable.Commands.Shell;
 
 import java.util.Scanner;
 
-import com.notable.notable.Commands.NoteCommands.Comment;
+import com.notable.notable.Commands.NoteCommands.Note;
 
 import io.quarkus.picocli.runtime.annotations.TopCommand;
 
@@ -26,7 +26,7 @@ public class ShellCommand implements Runnable {
             
 
             // Execute the Picocli command based on the input
-            CommandLine commandLine = new CommandLine(new Comment());
+            CommandLine commandLine = new CommandLine(new Note());
             commandLine.execute(input.split(" "));
             commandLine.clearExecutionResults();
             input = null;
