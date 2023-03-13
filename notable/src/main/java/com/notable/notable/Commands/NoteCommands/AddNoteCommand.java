@@ -1,8 +1,5 @@
 package com.notable.notable.Commands.NoteCommands;
 
-
-
-
 import com.notable.notable.Model.Note;
 import com.notable.notable.Repository.NoteRepo;
 
@@ -10,12 +7,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-
-
-
 @Command(name = "add", description = "Add a new note")
 public class AddNoteCommand implements Runnable {
-
 
     private NoteRepo noteRepo;
 
@@ -31,5 +24,6 @@ public class AddNoteCommand implements Runnable {
         note.setText(text);
         note.setTitle(title);
         System.out.println("Note added successfully");
+        System.out.println("The note text was: " + text);
     }
 }

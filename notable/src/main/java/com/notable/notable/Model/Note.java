@@ -1,10 +1,6 @@
 package com.notable.notable.Model;
 
-
-
-
 public class Note {
-
 
     private Long id;
 
