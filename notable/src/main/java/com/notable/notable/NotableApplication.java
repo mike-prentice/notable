@@ -14,7 +14,7 @@ import picocli.CommandLine.Command;
 public class NotableApplication {
 
 	public static void main(String[] args) {
-		new CommandLine(new NotableApplication()).execute(args);
+		System.exit(new CommandLine(new NotableApplication()).execute(args));
 	}
 
 } 
