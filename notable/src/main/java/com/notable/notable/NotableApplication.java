@@ -8,7 +8,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 @QuarkusMain
-@Command(name = "notable", subcommands = {
+@Command(name = "", description = "A command line application for note taking.", subcommands = {
 	ShellCommand.class
 })
 public class NotableApplication {
