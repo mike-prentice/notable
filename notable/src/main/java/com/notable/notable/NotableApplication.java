@@ -1,22 +1,20 @@
 package com.notable.notable;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
-import com.notable.notable.Commands.NoteCommands.AddNoteCommand;
+import com.notable.notable.Commands.Shell.ShellCommand;
 
-@SpringBootApplication
+import io.quarkus.runtime.annotations.QuarkusMain;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+
+@QuarkusMain
+@Command(name = "", description = "A command line application for note taking.", subcommands = {
+	ShellCommand.class
+})
 public class NotableApplication {
 
-	@Bean
-	AddNoteCommand noteCommand() {
-		return new AddNoteCommand();
-	}
-
 	public static void main(String[] args) {
-		System.exit(SpringApplication.exit(SpringApplication.run(NotableApplication.class, args)));
-
+		System.exit(new CommandLine(new NotableApplication()).execute(args));
 	}
 
-}
+} 

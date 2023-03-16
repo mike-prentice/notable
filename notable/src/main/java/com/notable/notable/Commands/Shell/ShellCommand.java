@@ -1,122 +1,107 @@
 package com.notable.notable.Commands.Shell;
 
-import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.function.Supplier;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.springframework.boot.ExitCodeGenerator;
-import org.springframework.stereotype.Component;
-
-import com.notable.notable.Commands.NoteCommands.AddNoteCommand;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.HelpCommand;
-import picocli.shell.jline3.PicocliCommands;
-import picocli.shell.jline3.PicocliCommands.PicocliCommandsFactory;
-import picocli.CommandLine;
-
-import org.fusesource.jansi.AnsiConsole;
-import org.jline.console.SystemRegistry;
-import org.jline.console.impl.Builtins;
-import org.jline.console.impl.SystemRegistryImpl;
-import org.jline.keymap.KeyMap;
-import org.jline.reader.*;
-import org.jline.reader.impl.DefaultParser;
-import org.jline.reader.impl.LineReaderImpl;
+import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
-import org.jline.widget.TailTipWidgets;
+import com.notable.notable.Commands.NoteCommands.Note;
+import com.notable.notable.Commands.QuitCommand.QuitCommand;
+import com.notable.notable.Util.ConsoleBuilder;
 
-@Command(name = "", description = {
-        "Take notes via the command line." +
-                "Type @|magenta <TAB>|@ to see available commands.",
-        "Type @|magenta ALT-S|@ to toggle tailtips.",
-        "" }, footer = { "", "Press Ctl-D to exit." }, subcommands = {
-                AddNoteCommand.class,
-                HelpCommand.class,
-        })
-@Component
-@RequiredArgsConstructor
-@Getter
-public class ShellCommand implements Runnable, ExitCodeGenerator {
-    private LineReaderImpl reader;
-    private PrintWriter out;
+import io.quarkus.picocli.runtime.annotations.TopCommand;
 
-    private int exitCode;
+import picocli.CommandLine.HelpCommand;
+import picocli.CommandLine.Spec;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
-    final void setReader(LineReader reader) {
-        out = reader.getTerminal().writer();
-    }
+@TopCommand
+@Command(name = "shell", description = "Interactive shell to manage notes.", subcommands = {
+        Note.class,
+        QuitCommand.class,
+        HelpCommand.class,
+})
+public class ShellCommand implements Runnable {
+    protected Terminal terminal;
+    protected LineReader reader;
+    protected String input = null;
+    protected ConsoleBuilder console = new ConsoleBuilder();
 
-    @Override
-    public int getExitCode() {
-        return exitCode;
-    }
+    @Spec
+    CommandLine.Model.CommandSpec spec;
 
     @Override
     public void run() {
-        ShellCommand shell = new ShellCommand();
-        AnsiConsole.systemInstall();
+        boolean run = true;
+        CommandLine commandLine = new CommandLine(new ShellCommand());
+
         try {
-            Supplier<Path> workDir = () -> Paths.get(System.getProperty("user.dir"));
-            Builtins builtins = new Builtins(workDir, null, null);
-            builtins.rename(Builtins.Command.TTOP, "top");
-            builtins.alias("zle", "widget");
-            builtins.alias("bindkey", "keymap");
+            terminal = console.getTerminal();
+            reader = console.getReader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            PicocliCommandsFactory factory = new PicocliCommandsFactory();
-            CommandLine command = new CommandLine(shell, factory);
-            PicocliCommands picoCommands = new PicocliCommands(command);
-            Parser parser = new DefaultParser();
-            try (Terminal terminal = TerminalBuilder.builder().build()) {
-                SystemRegistry systemRegistry = new SystemRegistryImpl(parser, terminal, workDir, null);
-                systemRegistry.setCommandRegistries(builtins, picoCommands);
-                systemRegistry.register("help", picoCommands);
+        // Prompt the user for input
+        while (run) {
 
-                LineReader reader = LineReaderBuilder.builder()
-                        .appName("notable")
-                        .terminal(terminal)
-                        .completer(systemRegistry.completer())
-                        .parser(parser)
-                        .variable(LineReader.LIST_MAX, 50)
-                        .build();
-
-                builtins.setLineReader(reader);
-                shell.setReader(reader);
-                factory.setTerminal(terminal);
-                TailTipWidgets widgets = new TailTipWidgets(reader, systemRegistry::commandDescription, 5,
-                        TailTipWidgets.TipType.COMPLETER);
-                widgets.enable();
-                KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
-                keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
-
-                String prompt = "notable> ";
-                String rightPrompt = null;
-
-                String line;
-                while (true) {
-                    try {
-                        systemRegistry.cleanUp();
-                        line = reader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
-                        systemRegistry.execute(line);
-                    } catch (UserInterruptException e) {
-                        // ignore
-                    } catch (EndOfFileException e) {
-                        return;
-                    } catch (Exception e) {
-                        systemRegistry.trace(e);
-                    }
-                }
+            try {
+                input = reader.readLine("notable> ");
+                reader.getTerminal().writer().println(input);
+            } catch (InputMismatchException e) {
+                e.printStackTrace();
             }
 
-        } catch (Throwable t) {
-            t.printStackTrace();
-        } finally {
-            AnsiConsole.systemUninstall();
+            // parse the input
+            String[] args = parseArgs(input);
+
+            run = checkForQuitCommand(args);
+
+            // Execute the Picocli command based on the input
+            commandLine.execute(args);
         }
+
+    }
+
+    private boolean checkForQuitCommand(String[] args) {
+
+        if (args[0].equals("quit")) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public String[] parseArgs(String input) {
+        List<String> argArray = new ArrayList<String>();
+        Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
+        Matcher regexMatcher = regex.matcher(input);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group(1) != null) {
+                // Add double-quoted string without the quotes
+                argArray.add(regexMatcher.group(1));
+            } else if (regexMatcher.group(2) != null) {
+                // Add single-quoted string without the quotes
+                argArray.add(regexMatcher.group(2));
+            } else {
+                // Add unquoted word
+                argArray.add(regexMatcher.group());
+            }
+
+        }
+        String[] args = new String[argArray.size()];
+
+        for (int i = 0; i < argArray.size(); i++) {
+            args[i] = argArray.get(i);
+        }
+        return args;
+
     }
 
 }
