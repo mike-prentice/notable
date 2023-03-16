@@ -42,6 +42,18 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-agroal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -54,12 +66,12 @@
       <groupId>info.picocli</groupId>
       <artifactId>picocli-shell-jline3</artifactId>
       <version>4.7.1</version>
-  </dependency>
-  <dependency>
-    <groupId>org.fusesource.jansi</groupId>
-    <artifactId>jansi</artifactId>
-    <version>2.4.0</version>
-</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.jansi</groupId>
+      <artifactId>jansi</artifactId>
+      <version>2.4.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

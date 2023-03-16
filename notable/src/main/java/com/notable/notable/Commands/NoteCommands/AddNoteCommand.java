@@ -1,7 +1,9 @@
 package com.notable.notable.Commands.NoteCommands;
 
+import javax.inject.Inject;
+
 import com.notable.notable.Model.Note;
-import com.notable.notable.Repository.NoteRepo;
+import com.notable.notable.Persistence.NoteDao;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -10,7 +12,8 @@ import picocli.CommandLine.Parameters;
 @Command(name = "add", description = "Add a new note")
 public class AddNoteCommand implements Runnable {
 
-    private NoteRepo noteRepo;
+    @Inject
+    NoteDao noteDao;
 
     @Parameters(description = "The text of the note")
     private String text;
@@ -23,7 +26,8 @@ public class AddNoteCommand implements Runnable {
         Note note = new Note();
         note.setText(text);
         note.setTitle(title);
-        System.out.println("Note added successfully");
+        noteDao.save(note);
+        
         System.out.println("The note text was: " + text);
     }
 }
