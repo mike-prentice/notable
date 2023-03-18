@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fusesource.jansi.AnsiConsole;
 import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 import com.notable.notable.Commands.NoteCommands.Note;
@@ -37,6 +38,7 @@ public class ShellCommand implements Runnable {
 
     @Override
     public void run() {
+        AnsiConsole.systemInstall();
         boolean run = true;
         CommandLine commandLine = new CommandLine(new ShellCommand());
 
@@ -52,7 +54,6 @@ public class ShellCommand implements Runnable {
 
             try {
                 input = reader.readLine("notable> ");
-                reader.getTerminal().writer().println(input);
             } catch (InputMismatchException e) {
                 e.printStackTrace();
             }
@@ -65,6 +66,7 @@ public class ShellCommand implements Runnable {
             // Execute the Picocli command based on the input
             commandLine.execute(args);
         }
+        AnsiConsole.systemUninstall();
 
     }
 

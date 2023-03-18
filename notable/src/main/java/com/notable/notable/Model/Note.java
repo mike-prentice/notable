@@ -1,54 +1,21 @@
 package com.notable.notable.Model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-public class Note {
+public class Note extends PanacheEntity{
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    public Long id;
 
-    private String text;
+    public String text;
 
-    private String title;
+    public String title;
 
-    private String category;
+    public String category;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;

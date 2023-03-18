@@ -1,6 +1,10 @@
 package com.notable.notable.Commands.NoteCommands;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 
 import com.notable.notable.Model.Note;
 import com.notable.notable.Persistence.NoteDao;
@@ -9,12 +13,14 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+@ApplicationScoped
 @Command(name = "add", description = "Add a new note")
 public class AddNoteCommand implements Runnable {
-
+    
     @Inject
     NoteDao noteDao;
 
+   
     @Parameters(description = "The text of the note")
     private String text;
 
@@ -23,11 +29,17 @@ public class AddNoteCommand implements Runnable {
 
     @Override
     public void run() {
+        AnsiConsole.systemInstall();
         Note note = new Note();
-        note.setText(text);
-        note.setTitle(title);
-        noteDao.save(note);
+        note.text = text;
+        note.title = title;
+        note.persist();
         
-        System.out.println("The note text was: " + text);
+        
+        System.out.println( Ansi.ansi().render("@|green The note text was: |@" + text ));
+        if(note.title != null){
+            System.out.println("The title was" + title);
+        AnsiConsole.systemUninstall();
+    }
     }
 }
