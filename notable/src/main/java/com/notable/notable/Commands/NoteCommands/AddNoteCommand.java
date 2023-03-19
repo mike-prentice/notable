@@ -7,7 +7,7 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import com.notable.notable.Model.Note;
-import com.notable.notable.Persistence.NoteDao;
+import com.notable.notable.Service.NoteService;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -18,7 +18,7 @@ import picocli.CommandLine.Parameters;
 public class AddNoteCommand implements Runnable {
     
     @Inject
-    NoteDao noteDao;
+    NoteService noteDao;
 
    
     @Parameters(description = "The text of the note")

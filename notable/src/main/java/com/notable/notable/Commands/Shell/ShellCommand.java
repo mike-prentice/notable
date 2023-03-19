@@ -72,7 +72,7 @@ public class ShellCommand implements Runnable {
 
     private boolean checkForQuitCommand(String[] args) {
 
-        if (args[0].equals("quit")) {
+        if (args.length != 0 && args[0].equals("quit")) {
             return false;
         } else {
             return true;

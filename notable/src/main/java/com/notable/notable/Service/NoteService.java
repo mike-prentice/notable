@@ -1,4 +1,4 @@
-package com.notable.notable.Persistence;
+package com.notable.notable.Service;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -12,14 +12,14 @@ import com.notable.notable.Model.Note;
 
 @ApplicationScoped
 @Provider
-public class NoteDao {
-    private static final Logger LOG = Logger.getLogger(NoteDao.class);
+public class NoteService {
+    private static final Logger LOG = Logger.getLogger(NoteService.class);
 
     @Inject
     EntityManager em;
 
    
-    public NoteDao(EntityManager em) {
+    public NoteService(EntityManager em) {
         this.em = em;
     }
 
