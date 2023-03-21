@@ -17,9 +17,6 @@ import picocli.CommandLine.Parameters;
 @Command(name = "add", description = "Add a new note")
 public class AddNoteCommand implements Runnable {
     
-    @Inject
-    NoteService noteDao;
-
    
     @Parameters(description = "The text of the note")
     private String text;

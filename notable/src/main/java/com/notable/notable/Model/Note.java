@@ -1,9 +1,11 @@
 package com.notable.notable.Model;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.Entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+@ApplicationScoped
 @Entity
 public class Note extends PanacheEntity{ //arcContainer null on persist
 
