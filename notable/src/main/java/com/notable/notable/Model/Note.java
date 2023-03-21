@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-public class Note extends PanacheEntity{
+public class Note extends PanacheEntity{ //arcContainer null on persist
 
     public String text;
 
