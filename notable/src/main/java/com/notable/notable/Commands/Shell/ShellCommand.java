@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
-import com.notable.notable.Commands.NoteCommands.Note;
+import com.notable.notable.Commands.NoteCommands.Notes;
 import com.notable.notable.Commands.QuitCommand.QuitCommand;
 import com.notable.notable.Util.ConsoleBuilder;
 
@@ -23,7 +23,7 @@ import picocli.CommandLine.Command;
 
 @TopCommand
 @Command(name = "shell", description = "Interactive shell to manage notes.", subcommands = {
-        Note.class,
+        Notes.class,
         QuitCommand.class,
         HelpCommand.class,
 })
