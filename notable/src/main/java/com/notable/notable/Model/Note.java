@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Note { // arcContainer null on persist
+public class Note { 
 
     @Id
     @GeneratedValue

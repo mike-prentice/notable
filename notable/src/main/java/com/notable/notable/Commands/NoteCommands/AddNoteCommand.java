@@ -2,7 +2,6 @@ package com.notable.notable.Commands.NoteCommands;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -20,17 +19,14 @@ public class AddNoteCommand implements Runnable {
 
     @Inject
     NoteRepository noteRepo;
-
+    
     @Parameters(description = "The text of the note")
     private String text;
 
     @Option(names = { "--title", "-t" }, description = "The title of the note")
     private String title;
 
-    @Transactional
-    public void saveNote(Note note) {
-        noteRepo.persist(note);
-    }
+    
 
     @Override
     public void run() {
@@ -38,7 +34,7 @@ public class AddNoteCommand implements Runnable {
         Note note = new Note();
         note.setText(text);
         note.setTitle(title);
-        saveNote(note);
+        noteRepo.persist(note);
 
         System.out.println(Ansi.ansi().render("@|green The note text was: |@" + text));
         if (note.getTitle() != null) {
